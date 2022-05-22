@@ -14,6 +14,10 @@ import WeatherButton from "./component/WeatherButton";
 // 현재위치를 가지고 api를 통해 날씨 호출
 function App() {
 
+  const [weather, setWeather] = useState(null);
+  const [city, setCity] = useState('');
+  const cities = ['paris', 'new york', 'tokyo', 'seoul'];
+
   const getCurrentLocation = () => {
     navigator.geolocation.getCurrentPosition((position) => {
       let lat = position.coords.latitude;
@@ -24,20 +28,24 @@ function App() {
 
   const getWeatherByCurrentLocation = async (lat, lon) => {     // await를 사용하려면 async를 꼭 사용해줘야함. async는 비동기적 처리
     const key = "7158715b5473263e43fe77ba8447ce89";
-    let url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${key}`;
+    let url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${key}&units=metric`;
     let response = await fetch(url);    // url 을 호출해서 데이터를 가져오는것을 기다려서 response하는것을
     let data = await response.json();      // api는 대부분 json파일로 구성되어 이 json 파일을 추출해야 볼 수 있다.
-    console.log("data", data);
+    setWeather(data);
   }
 
   useEffect(() => {
     getCurrentLocation()
-  }, [])
+  }, []);
+
+  useEffect(() => {
+    console.log("city?", city);
+  }, [city])
   return (
     <div>
       <div className="container">
-        <WeatherBox />
-        <WeatherButton />
+        <WeatherBox weather={weather} />
+        <WeatherButton cities={cities} setCity={setCity} />
       </div>
     </div>
   );
