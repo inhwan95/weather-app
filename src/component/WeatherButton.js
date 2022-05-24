@@ -14,6 +14,7 @@ const WeatherButton = ({ cities, setCity }) => {
           onClick={() => setCity(item)}
         >{item}</Button>
       ))}
+      console.log("sd")
     </div>
   )
 }
